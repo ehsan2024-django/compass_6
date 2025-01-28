@@ -22,38 +22,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#citySearch").autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: "{% url 'city_search' %}",
-                        dataType: "json",
-                        data: {
-                            term: request.term
-                        },
-                        success: function(data) {
-                            response(data.map(function(item) {
-                                return {
-                                    label: item.name,
-                                    value: item.name,
-                                    lat: item.lat,
-                                    lng: item.lng
-                                };
-                            }));
-                        }
-                    });
-                },
-                minLength: 1,
-                select: function(event, ui) {
-                    $("#coordinates")
-                        .html(
-                            `<strong>${ui.item.value}</strong><br>` +
-                            `عرض جغرافیایی: ${ui.item.lat}<br>` +
-                            `طول جغرافیایی: ${ui.item.lng}`
-                        )
-                        .addClass('active');
-                }
-            });
-        });
+        document.addEventListener("DOMContentLoaded", function() {
+    const citySearch = document.getElementById("citySearch");
+    const coordinates = document.getElementById("coordinates");
+
+    citySearch.addEventListener("input", function() {
+        const term = citySearch.value;
+
+        if (term.length >= 1) {
+            fetch("{% url 'city_search' %}?term=" + term)
+                .then(response => response.json())
+                .then(data => {
+                    const suggestions = data.map(item => ({
+                        label: item.name,
+                        value: item.name,
+                        lat: item.lat,
+                        lng: item.lng
+                    }));
+
+                    // باید اینجا منطق نمایش پیشنهادات رو پیاده‌سازی کنید
+                    // به عنوان مثال: نمایش در یک dropdown و غیره.
+                });
+        }
+    });
+
+    // فرض می‌کنیم شما راهی برای فعال کردن رویداد انتخاب یک پیشنهاد دارید
+    function handleSelect(ui) {
+        coordinates.innerHTML = `
+            <strong>${ui.item.value}</strong><br>
+            عرض جغرافیایی: ${ui.item.lat}<br>
+            طول جغرافیایی: ${ui.item.lng}
+        `;
+        coordinates.classList.add('active');
+    }
+
+    // باید این متد handleSelect رو زمانی که کاربر یک پیشنهاد رو انتخاب کرد، فراخوانی کنید
+});
+
     </script>
 </body>

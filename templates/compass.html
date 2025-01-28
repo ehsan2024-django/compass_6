@@ -1,56 +1,164 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>قطب‌نمای شهر</title>
-    <!-- اضافه کردن jQuery و jQuery UI -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.2/moment-jalaali.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fa.js"></script>
-
-
-    <link rel="stylesheet" href="{% static 'css/compass.css' %}">
-</head>
-<body>
-    <div class="main-container">
-        <div class="datetime-container">
-            <span id="current-time"></span>
-            <span id="current-date"></span>
+    <link rel="stylesheet" href="{% static 'css/compass.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body dir="rtl" class="m-0 p-0 box-border bg-gray-900">
+    <header
+      class="w-full bg-purple-600 p-3 text-white flex items-center justify-between"
+    >
+      <div class="flex items-center">
+        <i class="fas fa-bars ml-2 cursor-pointer"></i>
+        <p>راه بلد</p>
+      </div>
+      <div class="flex items-center">
+        <i class="fa-regular fa-message ml-4 cursor-pointer"></i>
+        <i class="fas fa-ellipsis-v cursor-pointer"></i>
+      </div>
+    </header>
+    <main>
+      <article
+        class="w-full flex items-center justify-between bg-purple-400 text-white p-3"
+      >
+        <div>
+          <p class="day-name font-bold">یکشنبه</p>
         </div>
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="نام شهر را وارد کنید...">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <line x1="19" y1="19" x2="16" y2="16"></line>
-                </svg>
-            </div>
-            <div id="city-name" class="city-name"></div>
+        <div id="hf" class="how-find cursor-pointer">
+          <span
+            class="fas fa-sun text-yellow-400 text-xl animate-bounce"
+          ></span>
         </div>
-        <div id="city-name" class="city-name"></div>
-        <div class="compass-container">
-            <div class="sun-info-container">
-                <div id="sun-position" class="sun-info">
-                    سمت خورشید: --°
-                </div>
-                <div id="sun-elevation" class="sun-info">
-                    ارتفاع خورشید: --°
-                </div>
-            </div>
-            <div class="compass">
-                <div class="direction n">شمال</div>
-                <div class="direction e">شرق</div>
-                <div class="direction s">جنوب</div>
-                <div class="direction w">غرب</div>
-                <div class="needle"></div>
-                <div class="qibla-needle"></div>
-            </div>
+        <div class="flex flex-col items-end">
+          <div class="date-now">
+            <span class="day-number text-sm">16</span>
+            <span class="month-name text-sm">دی</span>
+            <span class="year-number text-sm">1403</span>
+          </div>
+          <div>
+            <span class="time-now text-lg"></span>
+          </div>
         </div>
+      </article>
+      <article class="w-full bg-purple-400 p-4">
+        <div
+          class="w-52 bg-purple-300 rounded-lg mr-auto ml-auto p-2 flex justify-between items-center"
+        >
+          <i
+            id="sun"
+            onclick="showIcon('sun')"
+            class="fas fa-sun text-yellow-400 p-3 bg-purple-200 rounded cursor-pointer text-lg bg-purple-400 hover:bg-purple-400"
+          ></i>
+          <i
+            id="moon"
+            onclick="showIcon('moon')"
+            class="fas fa-moon text-white p-3 bg-purple-200 rounded cursor-pointer text-lg hover:bg-purple-400"
+          ></i>
+          <i
+            id="star"
+            onclick="showIcon('star')"
+            class="fas fa-star text-yellow-400 p-3 bg-purple-200 rounded cursor-pointer text-lg hover:bg-purple-400"
+          ></i>
+        </div>
+        <div class="flex items-baseline relative">
+          <input
+          type="text"
+          placeholder="شهر خود را انتخاب کنید"
+          class="w-full p-2 mt-8 border-none outline-none rounded"
+          id="city"
+        />
+        <i id="search-i" class="fas fa-search p-3 bg-purple-700 rounded cursor-pointer"></i>
+        </div>
+      </article>
+      <article id="show-compass" class="w-full flex hidden justify-between flex-col items-center bg-gray-900">
+        <div class="outer-circle mt-2  bg-gray-900 border-4 border-gray-700">
+          <div class="compass bg-gray-800 border-2 border-gray-500">
+            <div class="directions">
+              <div class="direction N text-red-500">N</div>
+              <div class="direction E text-gray-300">E</div>
+              <div class="direction S text-gray-300">S</div>
+              <div class="direction W text-gray-300">W</div>
+            </div>
+            <div class="fixed-needle">
+              <div class="needle-icon">
+                <img
+                  id="sun-q"
+                  src="https://img.icons8.com/fluency/48/sun.png"
+                  alt="خورشید"
+                />
+                <img
+                  id="moon-q"
+                  src="https://img.icons8.com/?size=100&id=m1w5SYBzprk5&format=png&color=000000"
+                  class="hidden"
+                  alt="ماه"
+                />
+                <img
+                  id="star-q"
+                  src="https://img.icons8.com/?size=100&id=XE152RjyKPsE&format=png&color=000000"
+                  class="hidden"
+                  alt="ستاره"
+                />
+              </div>
+            </div>
+            <div class="qibla-needle">
+              <div class="needle-icon">
+                <img src="https://img.icons8.com/?size=100&id=oZLQ5gT6D0eS&format=png&color=000000" alt="مکه" />
+              </div>
+            </div>
+            <div class="center-circle w-4 h-4 p-2 border-2 border-gray-400 bg-gray-600"></div>
+          </div>
+        </div>
+        <div class="w-80 flex justify-between items-center bg-gray-700 p-1 mt-2 rounded-lg text-white">
+          <p class="">اگر موبایل را به سمت <span id="span-show">خوشید</span> بگیری عقربه شکل کعبه قبله شما را نشان میدهد.</p>
+        </div>
+        <button onclick="location.reload()" class="border-0 p-1 text-white bg-gray-600 flex items-center"><i class="fas fa-refresh ml-2"></i>Refresh</button>
+      </article>
+      <article id="star-modal" class="hidden w-full h-full bg-purple-500 absolute top-0 left-0 p-8 text-gray-100">
+        <span id="close-s" class="fas fa-remove text-gray-300 text-xl cursor-pointer"></span>
+        <h4 class="mt-4">انتخاب ستاره ی راهنما</h4>
+        <div onclick="setStar('qotb')" id="qotb" dir="ltr" class="w-full p-3 bg-purple-400 mt-8 rounded-lg cursor-pointer hover:bg-purple-600 flex items-center">
+          <i class="fas fa-star text-lg text-yellow-400 mr-3"></i>
+          <div>
+            <p class="font-bold">ستاره قطبی</p>
+            <p class="text-xs">نزدیک به قطب شمال</p>
+          </div>
+        </div>
+        <div onclick="setStar('soheil')" id="soheil" dir="ltr" class="w-full p-3 bg-purple-400 mt-4 rounded-lg cursor-pointer hover:bg-purple-600 flex items-center">
+          <i class="fas fa-star text-lg text-blue-500 mr-3"></i>
+          <div>
+            <p class="font-bold">ستاره سهیل</p>
+            <p class="text-xs">نزدیک به زحل</p>
+          </div>
+        </div>
+        <div onclick="setStar('shabahang')" id="shabahang" dir="ltr" class="w-full p-3 bg-purple-400 mt-4 rounded-lg cursor-pointer hover:bg-purple-600 flex items-center">
+          <i class="fas fa-star text-lg text-blue-800 mr-3"></i>
+          <div>
+            <p class="font-bold">ستاره شباهنگ</p>
+            <p class="text-xs">نزدیک به مریخ</p>
+          </div>
+        </div>
+        <div onclick="setStar('eioq')" id="eioq" dir="ltr" class="w-full p-3 bg-purple-400 mt-4 rounded-lg cursor-pointer hover:bg-purple-600 flex items-center">
+          <i class="fas fa-star text-lg text-red-500 mr-3"></i>
+          <div>
+            <p class="font-bold">ستاره عیوق</p>
+            <p class="text-xs">نزدیک به مشتری</p>
+          </div>
+        </div>
+        <button id="star-btn" class="pt-1 pb-1 pr-4 pl-4 border-0 outline-0 rounded bg-purple-600 cursor-pointer hover:bg-purple-800">تایید</button>
+      </article>
+    </main>
+    <div id="modal" class="hidden p-3 bg-green-600 flex justify-center text-white rounded-lg absolute top-2 right-1">
+      <p>قبله پیدا شد</p>
     </div>
     <script src="{% static 'js/compass.js' %}"></script>
-</body>
+  </body>
 </html>
