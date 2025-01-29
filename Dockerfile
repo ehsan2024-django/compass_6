@@ -31,7 +31,7 @@ RUN pip install --verbose Django==5.1.2 && \
     pip install --verbose pytz==2024.2 && \
     pip install --verbose six==1.16.0 && \
     pip install --verbose sqlparse==0.5.1 && \
-    pip install --verbose tzdata==2024.1 && \
+    pip install --verbose tzdata==2024.1 && 
     #pip install --verbose whitenoise==6.7.0
 COPY . .
 
