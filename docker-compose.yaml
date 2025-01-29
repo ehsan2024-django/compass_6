@@ -5,9 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+
     volumes:
       - .:/app
-      - static_volume:/app/static
+      - static_volume:/app/staticfiles
       - media_volume:/app/media
     expose:
       - 8000
