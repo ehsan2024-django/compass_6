@@ -21,8 +21,8 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - static_volume:/app/static
       - media_volume:/app/media
+      - static_volume:/app/staticfiles
     ports:
       - "80:80"
     depends_on:
